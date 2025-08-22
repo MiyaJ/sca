@@ -1,0 +1,33 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8001
+
+spring:
+  application:
+    #项目名称必填，在注册中心唯一
+    #最好和之前域名规范、kubernetes service名等保持一致（会作为调用）
+    name: sca-gateway
+  cloud:
+    nacos:
+      discovery: #启用 spring cloud nacos discovery
+        server-addr: 127.0.0.1:8848
+    gateway:
+      routes: #路由规则配置
+        #第一个路由配置，corki-cloud-system路由规则
+        - id: sca-gateway #路由唯一标识
+          #lb开头代表基于gateway的负载均衡策略选择实例
+          uri: lb://sca-gateway
+          # 谓词配置
+          predicates:
+            #Path路径谓词，代表用户端URI如果以/system开头便会转发到corki-cloud-system实例
+            - Path=/admin/**
+            #After生效时间谓词，在xxx时间之后该路由才能在网关对外暴露
+            #- After=2024-01-17T00:00:00.000+08:00[Asia/Shanghai]
+          # 过滤器配置
+          filters:
+            #忽略掉第一层前缀进行转发
+            - StripPrefix=1
+            #为响应头附加X-Response=xxx
+            #- AddResponseHeader=X-Response,xxx
+  main:
+    web-application-type: reactive
