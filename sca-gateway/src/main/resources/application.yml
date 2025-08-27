@@ -14,9 +14,9 @@ spring:
     gateway:
       routes: #路由规则配置
         #第一个路由配置，corki-cloud-system路由规则
-        - id: sca-gateway #路由唯一标识
+        - id: sca-admin #路由唯一标识
           #lb开头代表基于gateway的负载均衡策略选择实例
-          uri: lb://sca-gateway
+          uri: lb://sca-admin
           # 谓词配置
           predicates:
             #Path路径谓词，代表用户端URI如果以/system开头便会转发到corki-cloud-system实例
@@ -29,5 +29,12 @@ spring:
             - StripPrefix=1
             #为响应头附加X-Response=xxx
             #- AddResponseHeader=X-Response,xxx
+
+  data:
+    # redis 配置
+    redis:
+      host: 127.0.0.1
+      port: 16379
+      password:
   main:
     web-application-type: reactive

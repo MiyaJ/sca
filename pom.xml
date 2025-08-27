@@ -28,6 +28,7 @@
         <spring-boot.version>3.0.2</spring-boot.version>
         <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
         <spring-cloud.version>2022.0.0</spring-cloud.version>
+        <sa-token.version>1.44.0</sa-token.version>
     </properties>
 
     <dependencyManagement>
