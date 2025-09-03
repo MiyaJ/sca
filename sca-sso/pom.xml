@@ -2,10 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>sca-gateway</artifactId>
+    <artifactId>sca-sso</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>sca-gateway</name>
-    <description>sca-gateway</description>
+    <name>sca-sso</name>
+    <description>sca-sso</description>
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>site.corki</groupId>
@@ -14,6 +15,17 @@
     </parent>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Nacos 服务发现 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -30,15 +42,17 @@
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-gateway</artifactId>
-        </dependency>
-
-        <!-- Sa-Token 权限认证（Reactor响应式集成）, 在线文档：https://sa-token.cc -->
+        <!-- Sa-Token 权限认证, 在线文档：https://sa-token.cc -->
         <dependency>
             <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-reactor-spring-boot3-starter</artifactId>
+            <artifactId>sa-token-spring-boot3-starter</artifactId>
+            <version>${sa-token.version}</version>
+        </dependency>
+
+        <!-- Sa-Token 插件：整合SSO -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-sso</artifactId>
             <version>${sa-token.version}</version>
         </dependency>
 
@@ -48,17 +62,22 @@
             <artifactId>sa-token-redis-jackson</artifactId>
             <version>${sa-token.version}</version>
         </dependency>
-
-        <!-- Sa-Token插件：权限缓存与业务缓存分离 -->
-        <dependency>
-            <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-alone-redis</artifactId>
-            <version>${sa-token.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
+        </dependency>
+
+        <!-- 视图引擎（在前后端不分离模式下提供视图支持） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <!-- Sa-Token 插件：整合 Forest 请求工具 (模式三需要通过 http 请求推送消息) -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-forest</artifactId>
+            <version>${sa-token.version}</version>
         </dependency>
 
     </dependencies>
@@ -92,7 +111,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>site.corki.gateway.ScaGatewayApplication</mainClass>
+                    <mainClass>site.corki.sso.ScaSsoApplication</mainClass>
                     <skip>true</skip>
                 </configuration>
                 <executions>

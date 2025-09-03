@@ -19,6 +19,7 @@
     <modules>
         <module>sca-admin</module>
         <module>sca-gateway</module>
+        <module>sca-sso</module>
     </modules>
 
     <properties>
